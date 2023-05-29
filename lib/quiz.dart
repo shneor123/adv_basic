@@ -4,9 +4,6 @@ import 'package:first_app/results_screen.dart';
 import 'package:first_app/start_screen.dart';
 import 'package:flutter/material.dart';
 
-const startAlignment = Alignment.topLeft;
-const endAlignment = Alignment.bottomLeft;
-
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
 
@@ -17,65 +14,65 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  List<String> selectdAnswer = [];
-  var activeScreen = 'start-screen';
+  List<String> _selectedAnswers = [];
+  var _activeScreen = 'start-screen';
 
-  void switchScreen() {
+  void _switchScreen() {
     setState(() {
-      activeScreen = 'questions-sereen';
+      _activeScreen = 'questions-screen';
     });
   }
 
-  // Widget? activeScreen;@override
-  //   void initState() {activeScreen = StartScreen(switchScreen);super.initState();}
-  //   void switchScreen() {setState(() { activeScreen = const QuestionsSereen();});}
+  void _chooseAnswer(String answer) {
+    _selectedAnswers.add(answer);
 
-  void chooseAnswer(String answer) {
-    selectdAnswer.add(answer);
-
-    if (selectdAnswer.length == questions.length) {
+    if (_selectedAnswers.length == questions.length) {
       setState(() {
-        activeScreen = 'results-sereen';
+        _activeScreen = 'results-screen';
       });
     }
   }
 
   void restartQuiz() {
     setState(() {
-      selectdAnswer = [];
-      activeScreen = 'questions-sereen';
+      _selectedAnswers = [];
+      _activeScreen = 'questions-screen';
     });
   }
 
   @override
   Widget build(context) {
-    // final screenWidget = activeScreen == 'start-screen' ? StartScreen(switchScreen): const QuestionsSereen();
-    Widget screenWidget = StartScreen(switchScreen);
-    if (activeScreen == 'questions-sereen') {
-      screenWidget = QuestionsSereen(onSelectdAnswer: chooseAnswer);
+    Widget screenWidget = StartScreen(_switchScreen);
+
+    if (_activeScreen == 'questions-screen') {
+      screenWidget = QuestionsScreen(
+        onSelectAnswer: _chooseAnswer,
+      );
     }
-    if (activeScreen == 'results-sereen') {
-      screenWidget = ResulusScreen(
-        chosenAnswers: selectdAnswer,
-        onRestart: restartQuiz,);
+
+    if (_activeScreen == 'results-screen') {
+      screenWidget = ResultsScreen(
+        chosenAnswers: _selectedAnswers,
+        onRestart: restartQuiz,
+      );
     }
 
     return MaterialApp(
       home: Scaffold(
-          body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(198, 30, 4, 59),
-              Color.fromARGB(255, 78, 13, 151),
-            ],
-            begin: startAlignment,
-            end: endAlignment,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 78, 13, 151),
+                Color.fromARGB(255, 107, 15, 168),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
+          child: screenWidget,
         ),
-        child: screenWidget,
-        // child: activeScreen,
-      )),
+      ),
     );
   }
 }

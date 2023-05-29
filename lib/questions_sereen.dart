@@ -1,34 +1,35 @@
 import 'package:first_app/answer_button.dart';
-import 'package:flutter/material.dart';
 import 'package:first_app/data/questions.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class QuestionsSereen extends StatefulWidget {
-  const QuestionsSereen({super.key, required this.onSelectdAnswer});
+class QuestionsScreen extends StatefulWidget {
+  const QuestionsScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
 
-  final void Function(String answer) onSelectdAnswer;
+  final void Function(String answer) onSelectAnswer;
 
   @override
-  State<QuestionsSereen> createState() {
-    return _QuestionsSereenState();
+  State<QuestionsScreen> createState() {
+    return _QuestionsScreenState();
   }
 }
 
-class _QuestionsSereenState extends State<QuestionsSereen> {
+class _QuestionsScreenState extends State<QuestionsScreen> {
   var currentQuestionIndex = 0;
 
-  void answerQuestion(String selectdAnswer) {
-    widget.onSelectdAnswer(
-      '...',
-    );
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer);
     setState(() {
-      currentQuestionIndex++;
+      currentQuestionIndex++; // increments the value by 1
     });
   }
 
   @override
   Widget build(context) {
-    final currQuestions = questions[currentQuestionIndex];
+    final currentQuestion = questions[currentQuestionIndex];
 
     return SizedBox(
       width: double.infinity,
@@ -39,7 +40,7 @@ class _QuestionsSereenState extends State<QuestionsSereen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              currQuestions.text,
+              currentQuestion.text,
               style: GoogleFonts.lato(
                 color: const Color.fromARGB(255, 201, 153, 251),
                 fontSize: 24,
@@ -48,7 +49,15 @@ class _QuestionsSereenState extends State<QuestionsSereen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
-            ...currQuestions.getShuffledAnswers().map((answer) => Padding(
+            // ...currentQuestion.getShuffledAnswers().map((answer) {
+            //   return AnswerButton(
+            //     answerText: answer,
+            //     onTap: () {
+            //       answerQuestion(answer);
+            //     },
+            //   );
+
+            ...currentQuestion.getShuffledAnswers().map((answer) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: AnswerButton(
                     answerText: answer,
